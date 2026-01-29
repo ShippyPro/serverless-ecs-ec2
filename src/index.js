@@ -4,7 +4,7 @@ const { get } = require('./util');
 const parse = require('./parser');
 const compile = require('./compiler');
 
-class ServerlessFargate {
+class ServerlessEcsEc2 {
   constructor(serverless) {
     serverless.configSchemaHandler.defineTopLevelProperty(
       'fargate',
@@ -121,4 +121,4 @@ class ServerlessFargate {
   }
 }
 
-module.exports = ServerlessFargate;
+module.exports = ServerlessEcsEc2;

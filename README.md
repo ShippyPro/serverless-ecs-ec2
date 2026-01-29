@@ -1,14 +1,14 @@
-# 🚀 Serverless Fargate
+# 🚀 Serverless ECS EC2
 
-Adds the ability to maintain long-running Fargate ECS tasks within your Serverless project.
+Adds the ability to maintain long-running ECS tasks within your Serverless project.
 
 ## Overview
 
 Not all behaviour can be broken down and modelled within Lambda's execution duration constraints.
 Sometimes you need the ability to exceed this duration, but wish to remain in a Serverless environment.
 
-This plugin adds the ability to declare Fargate-backed ECS tasks which are provisioned during a Serverless deployment.
-Taking advantage of Serverless Frameworks ability to build/push images to ECR, you are able to declare both long-running and Lambda-based behaviour side-by-side.
+This plugin adds the ability to declare ECS tasks which are provisioned during a Serverless deployment.
+Taking advantage of Serverless Framework's ability to build/push images to ECR, you are able to declare both long-running and Lambda-based behaviour side-by-side.
 
 At a high-level the plugin provides the following functionality:
 
@@ -16,7 +16,7 @@ At a high-level the plugin provides the following functionality:
 - Uses the ECR image support provided within Serverless Framework to help build tasks.
 - Maintains an IAM role which honours all managed policies and statements that have been declared within the provider configuration.
 - Provides _escape-hatches_ to supply custom configuration such as role ARNs/tags etc.
-- Handles both Fargate and Fargate Spot execution environments.
+- Supports both EC2 and Spot execution environments.
 
 ## Compatibility
 
@@ -55,7 +55,7 @@ provider:
       - sg-12345
 
     # (required) default subnets which are added to tasks that do not contain any overrides.
-    # all tasks MUST be assigned subnets as Fargate operates within `awsvpc` mode.
+    # all tasks MUST be assigned subnets as ECS operates within `awsvpc` mode.
     subnetIds:
       - subnet-1234
 
@@ -99,14 +99,14 @@ fargate:
   taskRoleArn: arn:aws:iam::123456:role/my-custom-task-role
 
   # (optional) additional role statements you wish to add to the task role, you would place statements here instead of at
-  # the provider level if you only wished them to target Fargate tasks.
+  # the provider level if you only wished them to target ECS tasks.
   iamRoleStatements:
     - Effect: Allow
       Action: 'resource:*'
       Resource: '*'
 
   # (optional) additional managed policies you wish to add to the task role, you would place policies here instead of at
-  # the provider level if you only wished them to target Fargate tasks.
+  # the provider level if you only wished them to target ECS tasks.
   iamManagedPolicies:
     - arn:aws:iam::123456:policy/my-managed-task-policy
 
@@ -116,14 +116,14 @@ fargate:
       - sg-12345
 
     # (required) default subnets which are added to tasks that do not contain any overrides; these override any provider-level configuration.
-    # all tasks MUST be assigned subnets as Fargate operates within `awsvpc` mode.
+    # all tasks MUST be assigned subnets as ECS operates within `awsvpc` mode.
     subnetIds:
       - subnet-1234
 
     # (optional) default flag to assign a public IP to each task, this requires the supplied subnets to be public (internet) facing.
     assignPublicIp: false
 
-  # (optional) additional tags you wish to apply to only Fargate task resources.
+  # (optional) additional tags you wish to apply to only ECS task resources.
   tags:
     name: value
 
@@ -160,12 +160,12 @@ fargate:
       taskRoleArn: arn:aws:iam::123456:role/my-custom-task-role
 
       vpc:
-        # (optional) security groups you wish to apply to the given tasks; these override any provider/fargate-level configuration.
+        # (optional) security groups you wish to apply to the given tasks; these override any provider/ecs-level configuration.
         securityGroupIds:
           - sg-12345
 
-        # (required) subnets you wish to apply to the given tasks; these override any provider/fargate-level configuration.
-        # all tasks MUST be assigned subnets as Fargate operates within `awsvpc` mode.
+        # (required) subnets you wish to apply to the given tasks; these override any provider/ecs-level configuration.
+        # all tasks MUST be assigned subnets as ECS operates within `awsvpc` mode.
         subnetIds:
           - subnet-1234
 
@@ -218,9 +218,9 @@ fargate:
         # (optional) used during deployment to determine how many tasks are required to remain active for the transition phase.
         minimumHealthyPercent: 100
 
-        # (optional) flag to determine if you wish to provision the task using Fargate Spot.
+        # (optional) flag to determine if you wish to provision the task using Spot instances.
         # note: at this time there is no fallback measures in-place to ensure that the task will be provisioned using
-        # on-demand Fargate if the spot instance can not be acquired.
+        # on-demand instances if the spot instance can not be acquired.
         spot: false
 
       # (optional) schedule expression used to configure the task to be executed at a desired time, as opposed to being a service.
@@ -248,4 +248,4 @@ fargate:
 
 ---
 
-Inspired by https://github.com/svdgraaf/serverless-fargate-tasks
+Forked from https://github.com/eddmann/serverless-fargate
