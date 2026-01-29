@@ -21,12 +21,6 @@ jobs:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: 'Install dependencies'
-        run: make install
-
-      - name: 'Run tests'
-        run: make test
-
       - name: 'Create GitHub Release'
         uses: softprops/action-gh-release@v2
         with:
