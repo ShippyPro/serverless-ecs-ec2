@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: write # Required for creating releases
-  id-token: write # Required for npm provenance
 
 jobs:
   publish:
@@ -29,6 +28,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Publish to npm'
-        run: npm publish --provenance --access public
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
